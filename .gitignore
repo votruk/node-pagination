@@ -1,0 +1,5 @@
+*.iml
+*.sqlite
+
+/node_modules
+/.idea
