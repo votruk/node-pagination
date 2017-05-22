@@ -46,7 +46,7 @@ router.get('/getByOffset', function (req, res, next) {
 });
 
 router.get('/getByAnchor', function (req, res, next) {
-    var message_anchor = req.query.anchor || null;
+    var message_anchor = parseInt(req.query.anchor) || undefined;
     var limit = parseInt(req.query.limit) || 5;
 
     var direction = req.query.direction;
@@ -63,14 +63,25 @@ router.get('/getByAnchor', function (req, res, next) {
         return;
     }
 
-    var sql;
-    if (toOldest) {
-        sql = "SELECT * FROM messages WHERE message_id < ?  ORDER BY message_id DESC LIMIT ?";
+
+    if (message_anchor !== undefined) {
+        with_anchor(res, toOldest, message_anchor, limit);
     } else {
-        sql = "SELECT * FROM messages WHERE message_id > ?  ORDER BY message_id ASC LIMIT ?";
+        without_anchor(res, toOldest, limit);
     }
 
-    db.all(sql, [message_anchor, limit], function (err, rows) {
+});
+
+
+function with_anchor(res, toOldest, message_anchor, limit) {
+    var anchored_sql;
+    if (toOldest) {
+        anchored_sql = "SELECT * FROM messages WHERE message_id < ?  ORDER BY message_id DESC LIMIT ?";
+    } else {
+        anchored_sql = "SELECT * FROM messages WHERE message_id > ?  ORDER BY message_id ASC LIMIT ?";
+    }
+
+    db.all(anchored_sql, [message_anchor, limit], function (err, rows) {
         if (err) {
             console.err(err);
             res.status(500);
@@ -78,6 +89,23 @@ router.get('/getByAnchor', function (req, res, next) {
             res.json(rows);
         }
     });
-});
+}
+
+function without_anchor(res, toOldest, limit) {
+    var sql;
+    if (toOldest) {
+        sql = "SELECT * FROM messages ORDER BY message_id DESC LIMIT ?";
+    } else {
+        sql = "SELECT * FROM messages ORDER BY message_id ASC LIMIT ?";
+    }
+    db.all(sql, [limit], function (err, rows) {
+        if (err) {
+            console.err(err);
+            res.status(500);
+        } else {
+            res.json(rows);
+        }
+    });
+}
 
 module.exports = router;
