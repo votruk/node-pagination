@@ -1,5 +1,5 @@
 *.iml
 *.sqlite
 
-/node_modules
-/.idea
+node_modules/
+.idea/
