@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var db = require('../db');
+var create_db_func = require('../db').create_db_func;
 var debug = require('debug')('node-pagination:server');
 var http = require('http');
 
@@ -92,21 +92,4 @@ function onListening() {
 }
 
 
-db.serialize(function () {
-    db.run(
-        "CREATE TABLE IF NOT EXISTS messages (" +
-        "  message_id      INTEGER PRIMARY KEY," +
-        "  message TEXT    NOT NULL" +
-        ")"
-    );
-
-    var stmt = db.prepare("INSERT INTO messages VALUES (?, ?)");
-    for (var i = 0; i < 10; i++) {
-        stmt.run(null, "Ipsum " + (i + 1));
-    }
-    stmt.finalize();
-
-    db.each("SELECT * FROM messages", function (err, row) {
-        console.log(row.message_id + ": " + row.message);
-    });
-});
+create_db_func();
