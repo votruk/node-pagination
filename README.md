@@ -7,11 +7,26 @@
   
 1.  `POST localhost:3000/messages/create`
 
-    `{ message: "message text" }`
+    ```json 
+    { 
+       "message": "message text" 
+    }
+      ```
 
     Посылаем сообщение.
 
 
-2.  `GET localhost:3000/messages/get?sinceId={messageId}&tillId={messageId}&offest={offset}&limit={limit}`
-
+2.  `POST localhost:3000/messages/get`
+    
+   
+    ```json
+    { 
+      "sinceId": messageId,
+      "tillId": messageId,
+      "limit": limit,
+      "offset": offset,
+    }
+    
+    ```
+    
     Все параметры являются опциональными.
