@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-var create = require('./messages/create');
-var get = require('./messages/get');
+var create = require('./message/create');
+var get = require('./message/get');
 
-router.get('/get', function (req, res, next) {
+router.post('/get', function (req, res, next) {
     get(req, res, next);
 });
 

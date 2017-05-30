@@ -76,19 +76,19 @@ function get_stmt_with_till_only() {
 }
 
 function calculate_offset(req) {
-    return parseInt(req.query.offset) || 0;
+    return parseInt(req.body.offset) || 0;
 }
 
 function calculate_limit(req) {
-    return parseInt(req.query.limit) || 20;
+    return parseInt(req.body.limit) || 20;
 }
 
 function calculate_since_id(req) {
-    return req.query.sinceId;
+    return req.body.sinceId;
 }
 
 function calculate_till_id(req) {
-    return req.query.tillId;
+    return req.body.tillId;
 }
 
 module.exports = get;
