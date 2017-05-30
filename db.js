@@ -10,14 +10,13 @@ function create_db() {
             "  message_id TEXT     NOT NULL," +
             "  message    TEXT     NOT NULL," +
             "  timestamp  DATETIME DEFAULT CURRENT_TIMESTAMP" +
-            "); "+
+            "); " +
             "CREATE UNIQUE INDEX id_index ON id_index(message_id, message);"
         );
 
         var stmt = db.prepare("INSERT INTO messages(message_id, message) VALUES (?, ?)");
         for (var i = 0; i < 40; i++) {
-            // stmt.run(uuid.v4(), "Ipsum " + (i + 1));
-            stmt.run("a"+i, "Ipsum " + (i + 1));
+            stmt.run(uuid.v4(), "Message " + (i + 1));
         }
         stmt.finalize();
 
