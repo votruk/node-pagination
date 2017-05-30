@@ -5,7 +5,7 @@
 Доступные методы:
 
   
-1.  `POST localhost:3000/messages/create`
+1.  `POST localhost:3000/message/create`
 
     ```json 
     { 
@@ -16,7 +16,7 @@
     Посылаем сообщение.
 
 
-2.  `POST localhost:3000/messages/get`
+2.  `POST localhost:3000/message/get`
     
    
     ```json
