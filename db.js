@@ -40,8 +40,7 @@ function create_db() {
             "  message_id TEXT     NOT NULL," +
             "  message    TEXT     NOT NULL," +
             "  timestamp  DATETIME DEFAULT CURRENT_TIMESTAMP" +
-            "); " +
-            "CREATE UNIQUE INDEX id_index ON id_index(message_id, message);"
+            ");"
         );
 
         var stmt = db.prepare("INSERT INTO messages(message_id, message) VALUES (?, ?)");

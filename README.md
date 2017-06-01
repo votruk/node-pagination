@@ -4,21 +4,29 @@
 
 Доступные методы:
 
-1.  `GET localhost:3000/messages/getAll`
-
-    Выдает все сообщения, которые есть на сервере
   
-2.  `POST localhost:3000/messages/send`
+1.  `POST localhost:3000/message/create`
 
-    `{ message: "message text" }`
+    ```json 
+    { 
+       "message": "message text" 
+    }
+      ```
 
     Посылаем сообщение.
 
-3.  `GET localhost:3000/messages/getByOffset?offest={offset}&limit={limit}`
 
-    Выдает сообщения с заданым оффсетом и лимитом. Если не указать offset, offset=0, если не указать лимит, то limit=5
-
-
-4.  `GET localhost:3000/messages/getByAnchor?anchor={message_id}&direction={toNewest|toOldest}&limit={limit}`
-
-    Выдает сообщения с заданым якорем, направлением и лимитом. Якорь необязателен. направление указывать обязательно. limit по умолчанию = 5.
+2.  `POST localhost:3000/message/get`
+    
+   
+    ```json
+    { 
+      "sinceId": messageId,
+      "tillId": messageId,
+      "limit": limit,
+      "offset": offset,
+    }
+    
+    ```
+    
+    Все параметры являются опциональными.
