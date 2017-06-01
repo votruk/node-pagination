@@ -1,6 +1,36 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(":memory:");
 var uuid = require('uuid');
+var Promise = require("bluebird");
+
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize('database', 'username', 'password', {
+    host: 'localhost',
+    dialect: 'sqlite',
+
+    pool: {
+        max: 5,
+        min: 0,
+        idle: 10000
+    },
+
+    // SQLite only
+    storage: ''
+});
+
+const User = sequelize.define('user', {
+    username: Sequelize.STRING,
+    birthday: Sequelize.DATE
+});
+
+sequelize
+    .authenticate()
+    .then(() => {
+    console.log('Connection has been established successfully.');
+})
+.catch(err => {
+    console.error('Unable to connect to the database:', err);
+});
 
 function create_db() {
     db.serialize(function () {
