@@ -1,15 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var create = require('./message/create');
-var get = require('./message/get');
+const messages = require('../controllers/messages');
 
-router.post('/get', function (req, res, next) {
-    get(req, res, next);
-});
-
-router.post('/create', function (req, res, next) {
-    create(req, res, next);
-});
+router.post('/listing', messages.listing);
+router.post('/create', messages.create);
+router.post('/get', messages.get);
 
 module.exports = router;
