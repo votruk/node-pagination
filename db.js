@@ -1,10 +1,9 @@
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database(":memory:");
-var uuid = require('uuid');
-var Promise = require("bluebird");
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database(":memory:");
+const uuid = require('uuid');
 
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('database', 'username', 'password', {
+const sequelize = new Sequelize('sequelize.sqlite', 'username', null, {
     host: 'localhost',
     dialect: 'sqlite',
 
@@ -15,22 +14,31 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     },
 
     // SQLite only
-    storage: ''
+    storage: 'sequelize.sqlite'
 });
 
-const User = sequelize.define('user', {
-    username: Sequelize.STRING,
-    birthday: Sequelize.DATE
+const Message = sequelize.define('message', {
+    // id: { type: Sequelize.INTEGER, autoIncrement: true,  allowNull: false, primaryKey: true},
+    message_id: {type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4},
+    message: {type: Sequelize.STRING, allowNull: false}
 });
 
-sequelize
-    .authenticate()
+Message.sync({force: true})
     .then(() => {
-    console.log('Connection has been established successfully.');
-})
-.catch(err => {
-    console.error('Unable to connect to the database:', err);
-});
+            let arr = [];
+            for (let i = 0; i < 100; i++) {
+                arr.push({
+                    message: 'Message ' + i + 1
+                });
+            }
+            return Message.bulkCreate(arr)
+                .then(() => { // Notice: There are no arguments here, as of right now you'll have to...
+                    return Message.findAll();
+                }).then(messages => {
+                    console.log(JSON.stringify(messages)) // ... in order to get the array of user objects
+                });
+        }
+    );
 
 function create_db() {
     db.serialize(function () {
@@ -43,8 +51,8 @@ function create_db() {
             ");"
         );
 
-        var stmt = db.prepare("INSERT INTO messages(message_id, message) VALUES (?, ?)");
-        for (var i = 0; i < 40; i++) {
+        const stmt = db.prepare("INSERT INTO messages(message_id, message) VALUES (?, ?)");
+        for (let i = 0; i < 40; i++) {
             stmt.run(uuid.v4(), "Message " + (i + 1));
         }
         stmt.finalize();
