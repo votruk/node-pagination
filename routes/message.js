@@ -1,15 +1,12 @@
-var express = require('express');
-var router = express.Router();
+"use strict";
 
-var create = require('./message/create');
-var get = require('./message/get');
+const express = require('express');
+const router = express.Router();
 
-router.post('/get', function (req, res, next) {
-    get(req, res, next);
-});
+const messages = require('../controllers/messages/index');
 
-router.post('/create', function (req, res, next) {
-    create(req, res, next);
-});
+router.post('/listing', messages.listing);
+router.post('/create', messages.create);
+router.post('/get', messages.get);
 
 module.exports = router;
