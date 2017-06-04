@@ -1,3 +1,5 @@
+"use strict";
+
 const Message = require('../../models/').Message;
 
 module.exports = {
